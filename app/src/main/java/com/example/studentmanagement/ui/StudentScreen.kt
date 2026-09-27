@@ -177,8 +177,7 @@ fun StudentScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { selectedStudent = student },
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                            .clickable { selectedStudent = student }
                     ) {
                         Row(
                             modifier = Modifier
