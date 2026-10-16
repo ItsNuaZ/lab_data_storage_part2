@@ -10,24 +10,22 @@ class StudentRepository(
 ) {
     suspend fun getStudents(): List<Student> {
         return try {
-            val remoteStudents = api.getStudents()
-            remoteStudents.forEach {
-                dao.insertStudent(it)
-            }
-            remoteStudents
-        } catch (_: Exception) {
-            val localStudents = dao.getAllStudents()
-            localStudents.ifEmpty {
-                val sampleStudents = listOf(
-                    Student(1, "66010001", "Somchai Jaidee", "Computer Science", isOnline = true),
-                    Student(2, "66010002", "Somsri Sookjai", "Information Technology", isOnline = false),
-                    Student(3, "66010003", "Anan Prasert", "Software Engineering", isOnline = true)
-                )
-                sampleStudents.forEach {
-                    dao.insertStudent(it)
+            val remoteStudents =
+                api.getStudents()
+            val localStudents =
+                remoteStudents.map {
+                    Student(
+                        id = it.id,
+                        studentCode = it.student_code,
+                        name = it.name,
+                        major = it.major
+                    )
                 }
-                sampleStudents
-            }
+            dao.deleteAll()
+            dao.insertAll(localStudents)
+            localStudents
+        } catch (e: Exception) {
+            dao.getAllStudents()
         }
     }
 

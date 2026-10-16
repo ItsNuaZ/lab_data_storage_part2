@@ -13,7 +13,7 @@ class StudentViewModel(
     private val repository: StudentRepository
 ) : ViewModel() {
     var students by mutableStateOf(
-        listOf<Student>()
+        emptyList<Student>()
     )
         private set
     var isLoading by mutableStateOf(false)
@@ -40,13 +40,12 @@ class StudentViewModel(
     fun loadStudents() {
         viewModelScope.launch {
             isLoading = true
-            errorMessage = null
 
             try {
                 students =
                     repository.getStudents()
             } catch (e: Exception) {
-                errorMessage = "ไม่สามารถโหลดข้อมูลได้"
+                errorMessage = e.message
             } finally {
                 isLoading = false
             }
@@ -66,7 +65,7 @@ class StudentViewModel(
                 repository.addStudent(newStudent)
                 loadStudents()
             } catch (e: Exception) {
-                errorMessage = "ไม่สามารถเพิ่มข้อมูลได้"
+                errorMessage = e.message ?: "Add student failed"
             }
         }
     }
@@ -77,7 +76,7 @@ class StudentViewModel(
                 repository.deleteStudent(student)
                 loadStudents()
             } catch (e: Exception) {
-                errorMessage = "ไม่สามารถลบข้อมูลได้"
+                errorMessage = e.message ?: "Delete failed"
             }
         }
     }
@@ -88,7 +87,7 @@ class StudentViewModel(
                 repository.updateStudent(student)
                 loadStudents()
             } catch (e: Exception) {
-                errorMessage = "ไม่สามารถแก้ไขข้อมูลได้"
+                errorMessage = "Couldn't update student data"
             }
         }
     }
