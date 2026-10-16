@@ -158,7 +158,7 @@ fun StudentScreen(
                         viewModel.loadStudents()
                     }
                 ) {
-                    Text("Load Students")
+                    Text("Refresh")
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
@@ -209,7 +209,7 @@ fun StudentScreen(
                             }
                             Button(
                                 onClick = {
-                                    viewModel.deleteStudent(student)
+                                    viewModel.deleteStudent(student.id)
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color.Red

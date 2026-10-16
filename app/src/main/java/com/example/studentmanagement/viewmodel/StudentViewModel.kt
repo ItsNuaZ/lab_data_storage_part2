@@ -55,14 +55,7 @@ class StudentViewModel(
     fun addStudent(studentCode: String, name: String, major: String) {
         viewModelScope.launch {
             try {
-                val newId = (students.maxOfOrNull { it.id } ?: 0) + 1
-                val newStudent = Student(
-                    id = newId,
-                    studentCode = studentCode,
-                    name = name,
-                    major = major
-                )
-                repository.addStudent(newStudent)
+                repository.addStudent(studentCode, name, major)
                 loadStudents()
             } catch (e: Exception) {
                 errorMessage = e.message ?: "Add student failed"
@@ -70,13 +63,13 @@ class StudentViewModel(
         }
     }
 
-    fun deleteStudent(student: Student) {
+    fun deleteStudent(id: Int) {
         viewModelScope.launch {
             try {
-                repository.deleteStudent(student)
+                repository.deleteStudent(id)
                 loadStudents()
             } catch (e: Exception) {
-                errorMessage = e.message ?: "Delete failed"
+                errorMessage = e.message ?: "Delete student failed"
             }
         }
     }
@@ -87,7 +80,7 @@ class StudentViewModel(
                 repository.updateStudent(student)
                 loadStudents()
             } catch (e: Exception) {
-                errorMessage = "Couldn't update student data"
+                errorMessage = e.message ?: "Update student failed"
             }
         }
     }

@@ -39,7 +39,7 @@ fun StudentDetailScreen(
     student: Student,
     onBack: () -> Unit,
     onEdit: (Student) -> Unit,
-    onDelete: (Student) -> Unit,
+    onDelete: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
@@ -190,7 +190,7 @@ fun StudentDetailScreen(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Button(
-                        onClick = { onDelete(student) },
+                        onClick = { onDelete(student.id) },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Red
                         )
