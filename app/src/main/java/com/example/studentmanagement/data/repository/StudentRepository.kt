@@ -2,6 +2,7 @@ package com.example.studentmanagement.data.repository
 
 import com.example.studentmanagement.data.local.StudentDao
 import com.example.studentmanagement.data.remote.StudentApi
+import com.example.studentmanagement.data.remote.StudentCreateRequest
 import com.example.studentmanagement.model.Student
 
 class StudentRepository(
@@ -29,21 +30,38 @@ class StudentRepository(
         }
     }
 
-    suspend fun addStudent(
-        student: Student
-    ) {
-        dao.insertStudent(student)
+    suspend fun addStudent(studentCode: String, name: String, major: String) {
+        val created = api.createStudent(
+            StudentCreateRequest(
+                student_code = studentCode,
+                name = name,
+                major = major
+            )
+        )
+        dao.insertStudent(
+            Student(
+                id = created.id,
+                studentCode = created.student_code,
+                name = created.name,
+                major = created.major
+            )
+        )
     }
 
-    suspend fun deleteStudent(
-        student: Student
-    ) {
-        dao.deleteStudent(student)
+    suspend fun updateStudent(student: Student) {
+        api.updateStudent(
+            student.id,
+            StudentCreateRequest(
+                student_code = student.studentCode,
+                name = student.name,
+                major = student.major
+            )
+        )
+        dao.updateStudent(student)
     }
 
-    suspend fun updateStudent(
-        student: Student
-    ) {
-        dao.insertStudent(student)
+    suspend fun deleteStudent(id: Int) {
+        api.deleteStudent(id)
+        dao.deleteById(id)
     }
 }
